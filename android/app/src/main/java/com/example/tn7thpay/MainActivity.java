@@ -1,4 +1,4 @@
-package com.example.tn7thpay;
+package com.dev.theblueorb.tn7thpaycalculator;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

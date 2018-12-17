@@ -3,46 +3,22 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 
 import 'result.dart';
-import 'gradePay.dart';
 
-void main() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(new MyApp());
-  });
-}
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: new ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: <String, WidgetBuilder>{
-        'inputScreen': (BuildContext context) => MyHomePage(),
-        'gradePayScreen': (BuildContext context) => GradePayPage(basePay: null),
-        'resultScreen': (BuildContext context) =>
-            ResultPage(basePay: null, gradePay: null),
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+class GradePayPage extends StatefulWidget {
+  int basePay;
+  GradePayPage({this.basePay});
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _GradePayState createState() => new _GradePayState(basePay);
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _GradePayState extends State<GradePayPage> {
   String oldSalary = "0";
   bool _isLoading = false;
+  int basePay;
+
+  _GradePayState(this.basePay);
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 end: Alignment
                     .bottomCenter, // 10% of the width, so there are ten blinds.
                 colors: [
-                  const Color(0xFFF50057),
-                  const Color(0xFFFF5983)
+                  const Color(0xFFA035EF),
+                  const Color(0xFFD213F2)
                 ], // whitish to gray
                 tileMode:
                     TileMode.repeated, // repeats the gradient over the canvas
@@ -107,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Text(
-                          "OLD BASE PAY AS PER 6th PAY",
+                          "OLD GRADE PAY AS PER 6th PAY",
                           textAlign: TextAlign.center,
                           style: new TextStyle(
                             color: Colors.white,
@@ -172,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Padding(
                         padding: EdgeInsets.all(10.0),
                         child: AnimatedContainer(
-                          height:40.0,
+                          height: 40.0,
                           width: _isLoading
                               ? 40.0
                               : MediaQuery.of(context).size.width * 0.8,
@@ -187,15 +163,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                   padding: EdgeInsets.all(5.0),
                                   child: CircularProgressIndicator(
                                     backgroundColor: Colors.white,
+                                    valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFFA035EF),),
                                   ),
                                 )
                               : RaisedButton(
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 100.0),
                                   child: Text(
-                                    _isLoading ? "" : "PROCEED",
+                                    _isLoading ? "" : "CALCULATE",
                                     style: new TextStyle(
-                                      color: Color(0xFFF50057),
+                                      color: Color(0xFFA035EF),
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -210,18 +187,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
 
                                     print("loading");
-
-                                    int basePay = int.parse(
-                                        oldSalary.replaceAll(",", ""));
-
+                                    
+                                    int gradePay = int.parse(oldSalary.replaceAll(",", ""));
+                                    
                                     Future.delayed(const Duration(milliseconds: 500),
                                         () {
-                                      _isLoading = false;
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  GradePayPage(
-                                                      basePay: basePay)));
+                                          _isLoading = false;
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => ResultPage(basePay: basePay,gradePay:gradePay)));
                                     });
                                   },
                                 ),
@@ -243,8 +215,8 @@ class NumberText extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-            splashColor: Color(0xFFFF5983),
-            highlightColor: Color(0xFFFF5983),
+            splashColor: Color(0xFFBD56EC),
+            highlightColor: Color(0xFFBD56EC),
             onTap: () {
               print("inkwell");
               callback(number);
